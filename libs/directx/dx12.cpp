@@ -123,8 +123,9 @@ public:
 	void OnResourceSetName(ID3D12Resource* pRes)
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
-		if (m_resources.find(pRes) != m_resources.end())
-			return;
+		auto it = m_resources.find(pRes);
+		if (it != m_resources.end())
+			GFSDK_Aftermath_DX12_UnregisterResource(it->second);
 		GFSDK_Aftermath_ResourceHandle rh;
 		GFSDK_Aftermath_DX12_RegisterResource(pRes, &rh);
 		m_resources[pRes] = rh;
@@ -873,9 +874,9 @@ HL_PRIM void HL_NAME(resource_release)( IUnknown *res ) {
 }
 
 HL_PRIM void HL_NAME(resource_set_name)( ID3D12Resource *res, vbyte *name ) {
+	res->SetName((LPCWSTR)name);
 	if (static_driver->gpuCrashTracker)
 		static_driver->gpuCrashTracker->OnResourceSetName(res);
-	res->SetName((LPCWSTR)name);
 }
 
 HL_PRIM void *HL_NAME(resource_map)( ID3D12Resource *res, int subres, D3D12_RANGE *range ) {
