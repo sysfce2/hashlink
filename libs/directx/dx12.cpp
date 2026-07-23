@@ -225,7 +225,7 @@ private:
 		vdynamic args[4];
 		vdynamic* vargs[4] = { &args[0], &args[1], &args[2], &args[3]};
 		args[0].t = &hlt_bytes;
-		args[0].v.ptr = hl_copy_bytes((const vbyte*)path, (uint32_t)strlen(path));
+		args[0].v.ptr = hl_copy_bytes((const vbyte*)path, (uint32_t)strlen(path) + 1);
 		args[1].t = &hlt_bytes;
 		args[1].v.ptr = hl_copy_bytes((const vbyte*)pData, size);
 		args[2].t = &hlt_i32;
